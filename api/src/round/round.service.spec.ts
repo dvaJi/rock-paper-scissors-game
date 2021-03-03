@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { Round, WinnerEnum } from "./round.entity";
+import { Round } from "./round.entity";
 import { RoundService } from "./round.service";
 
 const roundArray = [new Round(), new Round(), new Round()];
