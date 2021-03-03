@@ -1,0 +1,48 @@
+name: API pipeline
+
+on: [push, pull_request]
+
+env:
+  CI: true
+  DB_HOST: localhost
+  DB_PORT: 5432
+  DB_USERNAME: test
+  DB_PASSWORD: test
+  DB_NAME: test
+  DB_LOGGING: true
+  DB_SYNC: true
+
+jobs:
+  run:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [13, 14]
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 3
+      - name: Set Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - run: node --version
+      - run: npm --version
+
+      - name: Install npm dependencies
+        run: cd api && npm ci
+
+      - name: Run lint
+        run: cd api && npm run lint
+
+      - name: Run build
+        run: cd api && npm run build
+
+      - name: Run tests
+        run: cd api && npm run test:cov -- --maxWorkers=2

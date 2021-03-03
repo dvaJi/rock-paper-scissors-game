@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl font-semibold leading-10;
+  }
+  h2 {
+    @apply text-xl;
+  }
+}
+
+@layer components {
+  .card {
+    @apply w-11/12 px-12 py-8 bg-white sm:w-8/12 md:w-1/2 lg:w-5/12;
+  }
+
+  .input-txt {
+    @apply block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner;
+  }
+
+  .btn-primary {
+    @apply w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none transition-all hover:bg-gray-900 hover:shadow-none;
+  }
+}
+
+.blur-2 {
+  filter: blur(0.2rem);
+}
