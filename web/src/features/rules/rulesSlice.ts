@@ -6,11 +6,13 @@ const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 interface RulesState {
   rules: Rule[];
+  movements: string[];
   isLoading: boolean;
 }
 
 const initialState: RulesState = {
   rules: [],
+  movements: [],
   isLoading: true,
 };
 
@@ -52,22 +54,31 @@ export const rulesSlice = createSlice({
     builder.addCase(fetchRules.fulfilled, (state, action) => {
       state.rules = action.payload;
       state.isLoading = false;
+      state.movements = [...new Set(action.payload.map((r) => r.name))];
     });
 
     builder.addCase(createNewRule.fulfilled, (state, action) => {
       state.rules = [...state.rules, action.payload];
+      state.movements = [
+        ...new Set([...state.rules, action.payload].map((r) => r.name)),
+      ];
     });
 
     builder.addCase(deleteRule.fulfilled, (state, action) => {
       state.rules = state.rules.filter((r) => r.id !== action.payload.id);
+      state.movements = [
+        ...new Set(
+          state.rules
+            .filter((r) => r.id !== action.payload.id)
+            .map((r) => r.name)
+        ),
+      ];
     });
   },
 });
 
 export const selectRules = (state: RootState) => state.rules.rules;
-export const selectRulesName = (state: RootState) => [
-  ...new Set(state.rules.rules.map((r) => r.name)),
-];
+export const selectRulesName = (state: RootState) => state.rules.movements;
 export const selectIsLoading = (state: RootState) => state.rules.isLoading;
 
 export default rulesSlice.reducer;
