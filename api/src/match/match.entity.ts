@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 
 import { Player } from "@player/player.entity";
@@ -33,6 +34,6 @@ export class Match {
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
-  @Column({ type: "timestamp", onUpdate: "CURRENT_TIMESTAMP", nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date;
 }

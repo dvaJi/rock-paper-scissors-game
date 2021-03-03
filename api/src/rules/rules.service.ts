@@ -20,8 +20,8 @@ export class RulesService {
     return this.movesRepository.save(rule);
   }
 
-  findRuleByName(name: string): Promise<Rules> {
-    return this.movesRepository.findOne({ where: { name } });
+  findRuleByName(name: string): Promise<Rules[]> {
+    return this.movesRepository.find({ name });
   }
 
   findAllRules(): Promise<Rules[]> {

@@ -52,22 +52,66 @@ describe("RoundService", () => {
   });
   describe("determineWinner", () => {
     it("should successfully determine winner", () => {
-      const round = new Round();
-      round.playerOneMovement = {
-        id: 1,
-        name: "Rock",
-        kills: "Scissors",
-        rounds: [],
-        rounds2: [],
-      };
-      round.playerTwoMovement = {
-        id: 2,
-        name: "Scissors",
-        kills: "Paper",
-        rounds: [],
-        rounds2: [],
-      };
-      expect(service.determineWinner(round)).toEqual("PLAYER_ONE");
+      const playerOneMovement = [
+        {
+          id: 1,
+          name: "Rock",
+          kills: "Scissors",
+          rounds: [],
+          rounds2: [],
+        },
+      ];
+      const playerTwoMovement = [
+        {
+          id: 2,
+          name: "Scissors",
+          kills: "Paper",
+          rounds: [],
+          rounds2: [],
+        },
+      ];
+      expect(
+        service.determineWinner(playerOneMovement, playerTwoMovement)
+      ).toEqual({
+        winner: "PLAYER_ONE",
+        playerOneMovement: playerOneMovement[0],
+        playerTwoMovement: playerTwoMovement[0],
+      });
+    });
+
+    it("should successfully determine winner", () => {
+      const playerOneMovements = [
+        {
+          id: 3,
+          name: "Rock",
+          kills: "String",
+          rounds: [],
+          rounds2: [],
+        },
+        {
+          id: 1,
+          name: "Rock",
+          kills: "Scissors",
+          rounds: [],
+          rounds2: [],
+        },
+      ];
+      const playerTwoMovements = [
+        {
+          id: 2,
+          name: "Scissors",
+          kills: "Paper",
+          rounds: [],
+          rounds2: [],
+        },
+      ];
+      expect(
+        service.determineWinner(playerOneMovements, playerTwoMovements)
+      ).toEqual({
+        winner: "PLAYER_ONE",
+        playerOneMovement: playerOneMovements[1],
+        playerTwoMovement: playerTwoMovements[0],
+      });
     });
   });
 });

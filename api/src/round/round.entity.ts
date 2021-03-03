@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Match } from "@match/match.entity";
 import { Rules } from "../rules/rules.entity";
 
@@ -42,6 +48,6 @@ export class Round {
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
-  @Column({ type: "timestamp", onUpdate: "CURRENT_TIMESTAMP", nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date;
 }

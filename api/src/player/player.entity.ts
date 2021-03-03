@@ -1,5 +1,11 @@
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 import { Match } from "@match/match.entity";
 
@@ -27,7 +33,7 @@ export class Player {
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
-  @Column({ type: "timestamp", onUpdate: "CURRENT_TIMESTAMP", nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   constructor(name: string) {

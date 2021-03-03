@@ -9,6 +9,7 @@ import { MatchService } from "@match/match.service";
 import { CreateRoundDto } from "./dto/create-round-dto";
 import { RoundResponseDto } from "./dto/round-response";
 import { Round, WinnerEnum } from "../round/round.entity";
+import { Rules } from "@rules/rules.entity";
 
 @Injectable()
 export class RoundService implements OnModuleInit {
@@ -32,15 +33,18 @@ export class RoundService implements OnModuleInit {
       "playerOne",
       "playerTwo",
     ]);
-    round.match = match;
-    round.playerOneMovement = await this.rulesService.findRuleByName(
+    const pOneMovements = await this.rulesService.findRuleByName(
       newRound.playerOneMovement
     );
-    round.playerTwoMovement = await this.rulesService.findRuleByName(
+    const pTwoMovements = await this.rulesService.findRuleByName(
       newRound.playerTwoMovement
     );
+    const winnerCondition = this.determineWinner(pOneMovements, pTwoMovements);
 
-    round.winner = this.determineWinner(round);
+    round.match = match;
+    round.winner = winnerCondition.winner;
+    round.playerOneMovement = winnerCondition.playerOneMovement;
+    round.playerTwoMovement = winnerCondition.playerTwoMovement;
     round.round =
       (await this.countFinishedRoundsByMatchId(newRound.matchId)) + 1;
 
@@ -97,13 +101,30 @@ export class RoundService implements OnModuleInit {
     });
   }
 
-  determineWinner(round: Round) {
-    if (round.playerOneMovement.kills === round.playerTwoMovement.name) {
-      return WinnerEnum.PLAYER_ONE;
-    } else if (round.playerTwoMovement.kills === round.playerOneMovement.name) {
-      return WinnerEnum.PLAYER_TWO;
+  determineWinner(
+    playerOneMovement: Rules[] = [],
+    playerTwoMovement: Rules[] = []
+  ) {
+    const obj = {
+      winner: WinnerEnum.TIE,
+      playerOneMovement: playerOneMovement[0],
+      playerTwoMovement: playerTwoMovement[0],
+    };
+
+    const pOneKills = playerOneMovement.map((m) => m.kills);
+    const pTwoKills = playerTwoMovement.map((m) => m.kills);
+    if (pOneKills.includes(playerTwoMovement[0].name)) {
+      obj.winner = WinnerEnum.PLAYER_ONE;
+      obj.playerOneMovement = playerOneMovement.find(
+        (m) => m.kills === playerTwoMovement[0].name
+      );
+    } else if (pTwoKills.includes(playerOneMovement[0].name)) {
+      obj.winner = WinnerEnum.PLAYER_TWO;
+      obj.playerTwoMovement = playerTwoMovement.find(
+        (m) => m.kills === playerOneMovement[0].name
+      );
     }
 
-    return WinnerEnum.TIE;
+    return obj;
   }
 }

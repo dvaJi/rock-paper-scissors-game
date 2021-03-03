@@ -34,9 +34,4 @@ export class PlayerController {
   findOne(@Param("name") name: string): Promise<Player> {
     return this.playerService.findByName(name);
   }
-
-  @Delete(":id")
-  remove(@Param("id") id: string): Promise<void> {
-    return this.playerService.remove(id);
-  }
 }

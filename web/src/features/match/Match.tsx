@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchRules, selectRules } from "../rules/rulesSlice";
+import { fetchRules, selectRulesName } from "../rules/rulesSlice";
 import { selectMatch, fetchMatch, pushRound } from "./matchSlice";
 import MatchWinner from "./MatchWinner";
 import Score from "./Score";
@@ -14,11 +14,11 @@ export function Match() {
   const dispatch = useDispatch();
 
   const match = useSelector(selectMatch);
-  const rules = useSelector(selectRules);
+  const rules = useSelector(selectRulesName);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const value = currentSelection ? currentSelection : rules[0].name;
+    const value = currentSelection ? currentSelection : rules[0];
     if (!playerOneMovement) {
       setPlayerOneMovement(value);
     } else {
@@ -64,8 +64,8 @@ export function Match() {
                 className="input-txt"
               >
                 {rules.map((rule) => (
-                  <option key={rule.name} value={rule.name}>
-                    {rule.name}
+                  <option key={rule} value={rule}>
+                    {rule}
                   </option>
                 ))}
               </select>

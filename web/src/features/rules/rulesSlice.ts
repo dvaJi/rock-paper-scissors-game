@@ -65,6 +65,9 @@ export const rulesSlice = createSlice({
 });
 
 export const selectRules = (state: RootState) => state.rules.rules;
+export const selectRulesName = (state: RootState) => [
+  ...new Set(state.rules.rules.map((r) => r.name)),
+];
 export const selectIsLoading = (state: RootState) => state.rules.isLoading;
 
 export default rulesSlice.reducer;
